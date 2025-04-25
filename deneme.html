@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Bu bir JavaScript Eğitimidir!</h1>
+    <button>Değiştir!</button>
+
+    <script>
+      const buttonDOM = document.querySelector("button");
+      const h1DOM = document.querySelector("h1");
+      buttonDOM.addEventListener("click", () => {
+        h1DOM.textContent = "Bu bir React Eğitimidir!";
+      });
+    </script>
+  </body>
+</html>
