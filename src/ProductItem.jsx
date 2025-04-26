@@ -1,19 +1,19 @@
 import "./ProductItem.css";
 
-function ProductItem() {
-  const image =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREaXGeoatJyRmP9Aa-q4zaqgcUQim3bQHvjg&usqp=CAU";
-  const title = "Soda";
-  const price = 10;
-
+function ProductItem(props) {
+  console.log(props);
+  console.log(props.image);
+  console.log(props.price);
+  console.log(props.title);
+  
   return (
     <div className="product-item">
       <div className="product-image">
-        <img src={image} alt="Soda" />
+        <img src={props.image} alt="Soda" />
       </div>
       <div className="product-info">
-        <b className="product-title">{title}</b>
-        <span className="product-price">{price}₺</span>
+        <b className="product-title">{props.title}</b>
+        <span className="product-price">{props.price}₺</span>
       </div>
     </div>
   );
