@@ -1,0 +1,18 @@
+.product-item {
+  border: 1px solid #ccc;
+  width: 200px;
+}
+
+.product-image {
+  display: flex;
+}
+
+.product-image img {
+  width: 100%;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
