@@ -1,10 +1,6 @@
 import "./ProductItem.css";
 
 function ProductItem(props) {
-  console.log(props);
-  console.log(props.image);
-  console.log(props.price);
-  console.log(props.title);
   
   return (
     <div className="product-item">
