@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ProductItem from "./ProductItem";
-import { productsData } from "./data/productsData";
+import { productsData } from "../../data/productsData";
 import "./Products.css";
 
 function Products() {
