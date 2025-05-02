@@ -5,13 +5,9 @@ function ProductItem(props) {
   const { image, globalTitle, setGlobalTitle, title, price } = props;
   const [localTitleState, setTitleLocalState] = useState(title);
 
-  console.log(props);
-
   function handleTitleChange() {
     setTitleLocalState("Yüzük");
   }
-
-  console.log("component render edildi!");
 
   return (
     <div className="product-item">
