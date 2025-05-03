@@ -44,6 +44,17 @@ const AddProduct = ({ setProducts }) => {
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    // console.log(Object.keys(product));
+    const isFormValid = Object.values(product).every(
+      (value) => value.trim() !== ""
+    );
+
+    if (!isFormValid) {
+      alert("Lütfen inputları doldurun!");
+      return;
+    }
+
     const { imageUrl: image, price, title, category } = product;
     const newProduct = {
       id: Math.random(),
