@@ -3,7 +3,7 @@ import "./ProductItem.css";
 import Button from "../UI/Button";
 
 function ProductItem(props) {
-  const { image, globalTitle, setGlobalTitle, title, price } = props;
+  const { image, title, price } = props;
   const [localTitleState, setTitleLocalState] = useState(title);
 
   function handleTitleChange() {
@@ -18,7 +18,9 @@ function ProductItem(props) {
       <div className="product-info">
         <b className="product-title">{localTitleState}</b>
         <span className="product-price">{price}₺</span>
-        <Button color="primary" size="sm" onClick={handleTitleChange}>Title Değiştir!</Button>
+        <Button color="primary" size="sm" onClick={handleTitleChange}>
+          Title Değiştir!
+        </Button>
       </div>
     </div>
   );
