@@ -5,21 +5,20 @@ import { productsData } from "../../data/productsData";
 import "./Products.css";
 
 function Products() {
- const [globalTitle, setGlobalTitle] = useState("");
+  const [products, setProducts] = useState(productsData);
 
   return (
     <div className="products">
       <h1>Products Component</h1>
-      <AddProduct />
+      <AddProduct setProducts={setProducts} />
       <div className="products-wrapper">
-        {productsData.map((product) => (
+        {products.map((product) => (
           <ProductItem
             key={product.id}
             image={product.image}
             title={product.title}
             price={product.price}
-            globalTitle={globalTitle}
-            setGlobalTitle={setGlobalTitle}
+            category={product.category}
           />
         ))}
       </div>
