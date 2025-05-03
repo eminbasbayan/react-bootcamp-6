@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ProductItem.css";
+import Button from "../UI/Button";
 
 function ProductItem(props) {
   const { image, globalTitle, setGlobalTitle, title, price } = props;
@@ -17,7 +18,7 @@ function ProductItem(props) {
       <div className="product-info">
         <b className="product-title">{localTitleState}</b>
         <span className="product-price">{price}₺</span>
-        <button onClick={handleTitleChange}>Title Değiştir!</button>
+        <Button color="primary" size="sm" onClick={handleTitleChange}>Title Değiştir!</Button>
       </div>
     </div>
   );
