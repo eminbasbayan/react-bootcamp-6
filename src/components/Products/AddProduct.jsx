@@ -1,6 +1,34 @@
 import React, { useState } from "react";
 import Button from "../UI/Button";
 import "./AddProduct.css";
+import ProductInput from "./ProductInput";
+
+const productInputs = [
+  {
+    label: "Title",
+    type: "text",
+    name: "title",
+    placeholder: "Bir Title Giriniz.",
+  },
+  {
+    label: "Price",
+    type: "number",
+    name: "price",
+    placeholder: "Bir Price Giriniz.",
+  },
+  {
+    label: "Image URL",
+    type: "text",
+    name: "imageUrl",
+    placeholder: "Bir Image URL Giriniz.",
+  },
+  {
+    label: "Category",
+    type: "text",
+    name: "category",
+    placeholder: "Bir Category Giriniz.",
+  },
+];
 
 const AddProduct = ({ setProducts }) => {
   const [product, setProduct] = useState({
@@ -30,22 +58,9 @@ const AddProduct = ({ setProducts }) => {
 
   return (
     <form className="add-product-form" onSubmit={handleSubmit}>
-      <label>
-        Title:
-        <input type="text" name="title" onChange={handleChange} />
-      </label>
-      <label>
-        Price:
-        <input type="number" name="price" onChange={handleChange} />
-      </label>
-      <label>
-        Image URL:
-        <input type="text" name="imageUrl" onChange={handleChange} />
-      </label>
-      <label>
-        Category:
-        <input type="text" name="category" onChange={handleChange} />
-      </label>
+      {productInputs.map((input, index) => (
+        <ProductInput key={index} {...input} handleChange={handleChange} />
+      ))}
       <Button color="success">Yeni Ürün Ekle</Button>
     </form>
   );
