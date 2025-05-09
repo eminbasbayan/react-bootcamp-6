@@ -6,6 +6,7 @@ const Modal = ({ setIsShowModal }) => {
   }
   return (
     <div className="modal">
+      <div className="modal-overlay" onClick={handleModelClose}></div>
       <div className="modal-content">
         <div className="modal-header">
           <h5 className="modal-title">Modal Başlığı</h5>
