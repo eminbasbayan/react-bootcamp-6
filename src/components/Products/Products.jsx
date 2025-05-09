@@ -10,6 +10,11 @@ function Products() {
   const [products, setProducts] = useState(productsData);
   const [isShowModal, setIsShowModal] = useState(false);
 
+  function handleDeleteItem(productId) {
+    const filteredProducts = products.filter((item) => item.id !== productId);
+    setProducts(filteredProducts);
+  }
+
   return (
     <div className="products">
       <h1>Products Component</h1>
@@ -25,10 +30,12 @@ function Products() {
         {products.map((product) => (
           <ProductItem
             key={product.id}
+            id={product.id}
             image={product.image}
             title={product.title}
             price={product.price}
             category={product.category}
+            onDeleteItem={handleDeleteItem}
           />
         ))}
       </div>

@@ -1,15 +1,9 @@
-import { useState } from "react";
 import Button from "../UI/Button";
 
 import "./ProductItem.css";
 
 function ProductItem(props) {
-  const { image, title, price, category } = props;
-  const [localTitleState, setTitleLocalState] = useState(title);
-
-  function handleTitleChange() {
-    setTitleLocalState("Yüzük");
-  }
+  const { id, image, title, price, category, onDeleteItem } = props;
 
   return (
     <div className="product-item">
@@ -18,10 +12,10 @@ function ProductItem(props) {
       </div>
       <div className="product-info">
         <span className="product-category">{category}</span>
-        <b className="product-title">{localTitleState}</b>
+        <b className="product-title">{title}</b>
         <span className="product-price">{price}₺</span>
-        <Button color="primary" size="sm" onClick={handleTitleChange}>
-          Title Değiştir!
+        <Button color="danger" size="sm" onClick={()=> onDeleteItem(id)}>
+          Ürünü Sil
         </Button>
       </div>
     </div>
