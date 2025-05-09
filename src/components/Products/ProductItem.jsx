@@ -1,6 +1,7 @@
 import { useState } from "react";
-import "./ProductItem.css";
 import Button from "../UI/Button";
+
+import "./ProductItem.css";
 
 function ProductItem(props) {
   const { image, title, price, category } = props;

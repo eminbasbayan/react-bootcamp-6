@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import Button from "../UI/Button";
-import "./AddProduct.css";
 import ProductInput from "./ProductInput";
+
+import "./AddProduct.css";
 
 const productInputs = [
   {
@@ -38,9 +39,11 @@ const AddProduct = ({ setProducts }) => {
     category: "",
   });
 
+
   function handleChange({ target: { name, value } }) {
     setProduct({ ...product, [name]: value });
   }
+/*   console.log(product); */
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -65,12 +68,25 @@ const AddProduct = ({ setProducts }) => {
     };
 
     setProducts((prevState) => [newProduct, ...prevState]);
+
+    // form temizleme
+    setProduct({
+      title: "",
+      price: "",
+      imageUrl: "",
+      category: "",
+    });
   }
 
   return (
     <form className="add-product-form" onSubmit={handleSubmit}>
       {productInputs.map((input, index) => (
-        <ProductInput key={index} {...input} handleChange={handleChange} />
+        <ProductInput
+          key={index}
+          {...input}
+          value={product[input.name]}
+          handleChange={handleChange}
+        />
       ))}
       <Button color="success">Yeni Ürün Ekle</Button>
     </form>

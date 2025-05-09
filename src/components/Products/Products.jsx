@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AddProduct from "./AddProduct";
 import ProductItem from "./ProductItem";
+
 import { productsData } from "../../data/productsData";
 import "./Products.css";
 
