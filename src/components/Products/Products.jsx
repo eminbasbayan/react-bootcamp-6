@@ -14,7 +14,13 @@ function Products() {
     <div className="products">
       <h1>Products Component</h1>
       <AddProduct setProducts={setProducts} setIsShowModal={setIsShowModal} />
-      {isShowModal && <Modal setIsShowModal={setIsShowModal} />}
+      {isShowModal && (
+        <Modal
+          setIsShowModal={setIsShowModal}
+          title="Bu bir title örneğidir"
+          desc="Bu bir modal içerik örneğidir."
+        />
+      )}
       <div className="products-wrapper">
         {products.map((product) => (
           <ProductItem
