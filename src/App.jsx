@@ -1,10 +1,11 @@
-import Counter from "./components/Counter";
-/* import Products from "./components/Products/Products"; */
+import Products from "./components/Products/Products";
+import Users from "./components/Users";
 
 function App() {
   return (
     <div className="app container mx-auto">
-      <Counter />
+      <Users />
+      <Products />
     </div>
   );
 }
