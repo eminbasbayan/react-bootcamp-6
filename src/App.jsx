@@ -3,9 +3,9 @@ import Products from "./components/Products/Products";
 
 function App() {
   return (
-    <React.Fragment>
+    <div className="app container mx-auto">
       <Products />
-    </React.Fragment>
+    </div>
   );
 }
 
