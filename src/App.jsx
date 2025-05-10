@@ -1,10 +1,10 @@
-import React from "react";
-import Products from "./components/Products/Products";
+import Counter from "./components/Counter";
+/* import Products from "./components/Products/Products"; */
 
 function App() {
   return (
     <div className="app container mx-auto">
-      <Products />
+      <Counter />
     </div>
   );
 }
