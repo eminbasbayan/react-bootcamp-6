@@ -67,7 +67,7 @@ const AddProduct = ({ setProducts, setIsShowModal }) => {
       category,
     };
 
-    setProducts((prevState) => [newProduct, ...prevState]);
+    setProducts(newProduct);
 
     // form temizleme
     setProduct({
