@@ -1,21 +1,8 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { registerSchema } from "../../schemas/auth/registerSchema";
 
 // Yup doğrulama şeması
-const schema = yup.object({
-  firstName: yup.string().required("Ad zorunludur"),
-  lastName: yup.string().required("Soyad zorunludur"),
-  email: yup
-    .string()
-    .email("Geçerli bir e-posta girin")
-    .required("E-posta zorunludur"),
-  password: yup
-    .string()
-    .min(6, "Şifre en az 6 karakter olmalıdır")
-    .required("Şifre zorunludur"),
-});
 
 const RegisterForm = () => {
   const {
@@ -23,7 +10,7 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(registerSchema),
     mode: "onBlur",
   });
 
