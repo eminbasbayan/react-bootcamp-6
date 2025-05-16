@@ -1,10 +1,32 @@
+import React from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+// Yup doğrulama şeması
+const schema = yup.object({
+  firstName: yup.string().required("Ad zorunludur"),
+  lastName: yup.string().required("Soyad zorunludur"),
+  email: yup
+    .string()
+    .email("Geçerli bir e-posta girin")
+    .required("E-posta zorunludur"),
+  password: yup
+    .string()
+    .min(6, "Şifre en az 6 karakter olmalıdır")
+    .required("Şifre zorunludur"),
+});
 
 const RegisterForm = () => {
-  // react-hook-form'dan form fonksiyonları alınıyor
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+  });
 
-  // Form gönderildiğinde çalışacak fonksiyon
   const onSubmit = (data) => {
     console.log("Form verisi:", data);
   };
@@ -26,6 +48,11 @@ const RegisterForm = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Adınızı girin"
             />
+            {errors.firstName && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.firstName.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -37,6 +64,11 @@ const RegisterForm = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Soyadınızı girin"
             />
+            {errors.lastName && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.lastName.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -44,10 +76,15 @@ const RegisterForm = () => {
             </label>
             <input
               type="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               {...register("email")}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="example@mail.com"
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -55,10 +92,15 @@ const RegisterForm = () => {
             </label>
             <input
               type="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               {...register("password")}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Şifrenizi girin"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div>
             <button

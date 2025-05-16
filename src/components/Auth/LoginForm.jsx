@@ -1,12 +1,32 @@
-import React from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .email("Geçerli bir e-posta girin")
+    .required("E-posta zorunlu"),
+  password: yup
+    .string()
+    .min(6, "Şifre en az 6 karakter olmalı")
+    .required("Şifre zorunlu"),
+});
 
 const LoginForm = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+  });
 
   const onSubmit = (data) => {
     console.log("form verisi:", data);
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
@@ -24,6 +44,11 @@ const LoginForm = () => {
               {...register("email")}
               placeholder="example@mail.com"
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500 font-bold">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -35,6 +60,11 @@ const LoginForm = () => {
               {...register("password")}
               placeholder="Şifrenizi girin"
             />
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500 font-bold">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <label className="flex items-center text-sm text-gray-600">
