@@ -1,6 +1,10 @@
 import { ShoppingCart } from "lucide-react";
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 
-const Header = ({ cartItems }) => {
+const Header = () => {
+  const { cartItems } = useContext(CartContext);
+  
   return (
     <header className="bg-white shadow-md sticky top-0">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">

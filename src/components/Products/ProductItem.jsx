@@ -1,19 +1,14 @@
+import { useContext } from "react";
 import Button from "../UI/Button";
 
 import "./ProductItem.css";
+import { CartContext } from "../../context/CartContext";
 
 function ProductItem(props) {
-  const {
-    id,
-    image,
-    title,
-    description,
-    price,
-    category,
-    onDeleteItem,
-    addToCart,
-  } = props;
+  const { id, image, title, description, price, category, onDeleteItem } =
+    props;
   const productItem = { id, image, title, description, price, category };
+  const { addToCart } = useContext(CartContext);
 
   return (
     <div className="product-item">
