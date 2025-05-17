@@ -1,10 +1,12 @@
-import { ShoppingCart } from "lucide-react";
+import { Moon, ShoppingCart, Sun } from "lucide-react";
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
+import { ThemeContext } from "../../context/ThemeProvider";
 
 const Header = () => {
   const { cartItems } = useContext(CartContext);
-  
+  const { darkMode, toggleTheme } = useContext(ThemeContext);
+
   return (
     <header className="bg-white shadow-md sticky top-0">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -26,17 +28,24 @@ const Header = () => {
             İletişim
           </a>
         </nav>
-
-        {/* Sepet Butonu */}
-        <div className="relative">
-          <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">
-            <ShoppingCart size={20} />
-            <span>Sepet</span>
+        <div className="flex gap-2">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-gray-200 hover:bg-gray-300  transition"
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          {/* Sepet öğe sayısı için küçük rozet */}
-          <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {cartItems.length}
-          </span>
+          {/* Sepet Butonu */}
+          <div className="relative">
+            <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">
+              <ShoppingCart size={20} />
+              <span>Sepet</span>
+            </button>
+            {/* Sepet öğe sayısı için küçük rozet */}
+            <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {cartItems.length}
+            </span>
+          </div>
         </div>
       </div>
     </header>

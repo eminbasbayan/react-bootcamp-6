@@ -3,9 +3,12 @@ import App from "./App";
 import CartProvider from "./context/CartProvider";
 
 import "./index.css";
+import ThemeProvider from "./context/ThemeProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <CartProvider>
-    <App />
-  </CartProvider>
+  <ThemeProvider>
+    <CartProvider>
+      <App />
+    </CartProvider>
+  </ThemeProvider>
 );
