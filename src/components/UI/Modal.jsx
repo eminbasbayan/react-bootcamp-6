@@ -1,10 +1,13 @@
 import { createPortal } from "react-dom";
 
+import { useContext, useEffect, useState } from "react";
+
 import "./Modal.css";
-import { useEffect, useState } from "react";
+import { CartContext } from "../../context/CartContext";
 
 const Modal = ({ setIsShowModal, title, desc }) => {
   const [count, setCount] = useState(0);
+  const data = useContext(CartContext);
 
   function handleModelClose() {
     setIsShowModal(false);
@@ -26,6 +29,8 @@ const Modal = ({ setIsShowModal, title, desc }) => {
       clearInterval(id);
     };
   }, []);
+
+  console.log(data);
 
   return createPortal(
     <div className="modal">
