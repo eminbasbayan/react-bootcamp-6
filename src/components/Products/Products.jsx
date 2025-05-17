@@ -6,7 +6,7 @@ import Modal from "../UI/Modal";
 import { reducerFunction, initialState } from "./productReducer";
 import "./Products.css";
 
-function Products() {
+function Products({ addToCart }) {
   const [state, dispatch] = useReducer(reducerFunction, initialState);
 
   function handleDeleteItem(productId) {
@@ -56,6 +56,7 @@ function Products() {
             description={product.description}
             category={product.category}
             onDeleteItem={handleDeleteItem}
+            addToCart={addToCart}
           />
         ))}
       </div>
