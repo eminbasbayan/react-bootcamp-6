@@ -6,6 +6,7 @@ import Cart from './components/Cart/Cart';
 import HomePage from './pages/HomePage';
 import CartPage from './pages/CartPage';
 import { Route, Routes } from 'react-router-dom';
+import Counter from './components/Counter';
 
 function App() {
   const { darkMode } = useContext(ThemeContext);
@@ -20,6 +21,7 @@ function App() {
     >
       <Header />
       <div className="pt-4">
+        <Counter />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />

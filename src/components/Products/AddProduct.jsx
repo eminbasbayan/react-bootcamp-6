@@ -39,9 +39,6 @@ const AddProduct = ({ setProducts, setIsShowModal }) => {
     imageUrl: "",
     category: "",
   });
-  const data = useContext(CartContext);
-
-  console.log(data);
 
   function handleChange({ target: { name, value } }) {
     setProduct({ ...product, [name]: value });
