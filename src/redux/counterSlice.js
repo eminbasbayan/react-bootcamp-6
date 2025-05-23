@@ -10,9 +10,9 @@ const counterSlice = createSlice({
       state.count += 1;
     },
     azalt: (state) => {
-        state.count -= 1;
+      state.count -= 1;
     },
   },
 });
 
-
+export default counterSlice.reducer;
