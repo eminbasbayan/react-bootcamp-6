@@ -1,23 +1,9 @@
-import React from "react";
-import { Trash2, Plus, Minus } from "lucide-react"; // Lucide ikonlarını kullanmak için
+import React, { useContext } from 'react';
+import { Trash2, Plus, Minus } from 'lucide-react'; // Lucide ikonlarını kullanmak için
+import { CartContext } from '../../context/CartContext';
 
 const Cart = () => {
-  const cartItems = [
-    {
-      id: 1,
-      name: "Ürün 1",
-      price: 299.99,
-      quantity: 1,
-      image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-    },
-    {
-      id: 2,
-      name: "Ürün 2",
-      price: 149.99,
-      quantity: 2,
-      image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-    },
-  ];
+  const { cartItems } = useContext(CartContext);
 
   return (
     <div className="mx-auto p-4 bg-white rounded-2xl shadow-lg">
@@ -32,9 +18,7 @@ const Cart = () => {
             />
             <div className="flex-1">
               <h3 className="text-lg font-medium">{item.name}</h3>
-              <p className="text-gray-500 text-sm">
-                {item.price.toFixed(2)}₺
-              </p>
+              <p className="text-gray-500 text-sm">{item.price.toFixed(2)}₺</p>
               <div className="flex items-center mt-2 space-x-2">
                 <button className="p-1 bg-gray-200 rounded hover:bg-gray-300">
                   <Minus size={16} />
