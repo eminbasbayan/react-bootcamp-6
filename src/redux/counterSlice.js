@@ -15,4 +15,5 @@ const counterSlice = createSlice({
   },
 });
 
+export const { arttir, azalt } = counterSlice.actions;
 export default counterSlice.reducer;
