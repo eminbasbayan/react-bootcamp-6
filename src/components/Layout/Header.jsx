@@ -1,7 +1,8 @@
-import { Moon, ShoppingCart, Sun } from "lucide-react";
-import { useContext } from "react";
-import { CartContext } from "../../context/CartContext";
-import { ThemeContext } from "../../context/ThemeProvider";
+import { Moon, ShoppingCart, Sun } from 'lucide-react';
+import { useContext } from 'react';
+import { CartContext } from '../../context/CartContext';
+import { ThemeContext } from '../../context/ThemeProvider';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const { cartItems } = useContext(CartContext);
@@ -15,18 +16,27 @@ const Header = () => {
 
         {/* Menü */}
         <nav className="hidden md:flex space-x-6">
-          <a href="#" className="text-gray-700 hover:text-blue-600 transition">
+          <Link to="/" className="text-gray-700 hover:text-blue-600 transition">
             Anasayfa
-          </a>
-          <a href="#" className="text-gray-700 hover:text-blue-600 transition">
+          </Link>
+          <Link
+            to="/products"
+            className="text-gray-700 hover:text-blue-600 transition"
+          >
             Ürünler
-          </a>
-          <a href="#" className="text-gray-700 hover:text-blue-600 transition">
+          </Link>
+          <Link
+            to="/about"
+            className="text-gray-700 hover:text-blue-600 transition"
+          >
             Hakkımızda
-          </a>
-          <a href="#" className="text-gray-700 hover:text-blue-600 transition">
+          </Link>
+          <Link
+            to="/contact"
+            className="text-gray-700 hover:text-blue-600 transition"
+          >
             İletişim
-          </a>
+          </Link>
         </nav>
         <div className="flex gap-2">
           <button
@@ -36,7 +46,7 @@ const Header = () => {
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           {/* Sepet Butonu */}
-          <div className="relative">
+          <Link to="/cart" className="relative">
             <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">
               <ShoppingCart size={20} />
               <span>Sepet</span>
@@ -45,7 +55,7 @@ const Header = () => {
             <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
               {cartItems.length}
             </span>
-          </div>
+          </Link>
         </div>
       </div>
     </header>

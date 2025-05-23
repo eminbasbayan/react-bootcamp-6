@@ -8,14 +8,14 @@ const Cart = () => {
       name: "Ürün 1",
       price: 299.99,
       quantity: 1,
-      image: "https://via.placeholder.com/80",
+      image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
     },
     {
       id: 2,
       name: "Ürün 2",
       price: 149.99,
       quantity: 2,
-      image: "https://via.placeholder.com/80",
+      image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
     },
   ];
 
