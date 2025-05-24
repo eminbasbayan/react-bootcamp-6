@@ -1,11 +1,10 @@
 import { useContext } from 'react';
-import Header from './components/Layout/Header';
-import Products from './components/Products/Products';
+import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import { ThemeContext } from './context/ThemeProvider';
-import Cart from './components/Cart/Cart';
+import Header from './components/Layout/Header';
 import HomePage from './pages/HomePage';
 import CartPage from './pages/CartPage';
-import { Route, Routes } from 'react-router-dom';
 import Counter from './components/Counter';
 
 function App() {
@@ -19,6 +18,7 @@ function App() {
         color: `${darkMode ? 'white' : 'black'}`,
       }}
     >
+      <ToastContainer />
       <Header />
       <div className="pt-4">
         <Counter />
