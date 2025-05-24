@@ -35,7 +35,25 @@ const cartSlice = createSlice({
         transition: Zoom,
       });
     },
-    removeFromCart: () => {},
+    removeFromCart: (state, { payload: productId }) => {
+      const filteredCartItems = state.cartItems.filter(
+        (item) => item.id !== productId
+      );
+
+      state.cartItems = filteredCartItems;
+
+      toast.success("Ürün sepetten silindi!", {
+        position: "bottom-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Zoom,
+      });
+    },
   },
 });
 
