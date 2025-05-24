@@ -6,8 +6,29 @@ const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const fullName = "Emin Başbayan";
 
+  console.log(cartItems);
+
+  // 1, 2, 3, 4, 5
   function addToCart(productItem) {
-    setCartItems((prevState) => [productItem, ...prevState]);
+    const findCartItem = cartItems.find((item) => item.id === productItem.id);
+
+    if (findCartItem) {
+      setCartItems((prevCartItems) => {
+        return prevCartItems.map((item) => {
+          if (item.id === findCartItem.id) {
+            return { ...findCartItem, quantity: item.quantity + 1 };
+          } else {
+            return item;
+          }
+        });
+      });
+    } else {
+      setCartItems((prevState) => [
+        { ...productItem, quantity: 1 },
+        ...prevState,
+      ]);
+    }
+
     toast.success("Ürün sepete eklendi!", {
       position: "top-right",
       autoClose: 1500,
