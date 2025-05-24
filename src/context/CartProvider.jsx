@@ -30,7 +30,7 @@ const CartProvider = ({ children }) => {
     }
 
     toast.success("Ürün sepete eklendi!", {
-      position: "top-right",
+      position: "bottom-right",
       autoClose: 1500,
       hideProgressBar: false,
       closeOnClick: true,

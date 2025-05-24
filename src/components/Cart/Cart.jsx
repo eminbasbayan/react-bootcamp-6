@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
-import { Trash2, Plus, Minus } from 'lucide-react'; // Lucide ikonlarını kullanmak için
-import { CartContext } from '../../context/CartContext';
+import React, { useContext } from "react";
+import { Trash2, Plus, Minus } from "lucide-react"; // Lucide ikonlarını kullanmak için
+import { CartContext } from "../../context/CartContext";
+import { useSelector } from "react-redux";
 
 const Cart = () => {
-  const { cartItems } = useContext(CartContext);
+  const { cartItems } = useSelector((state) => state.cart);
 
-  console.log(cartItems);
-  
 
   return (
     <div className="mx-auto p-4 bg-white rounded-2xl shadow-lg">

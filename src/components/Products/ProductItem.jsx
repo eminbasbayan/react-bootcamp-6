@@ -3,12 +3,14 @@ import Button from "../UI/Button";
 
 import "./ProductItem.css";
 import { CartContext } from "../../context/CartContext";
+import { addToCart } from "../../redux/cartSlice";
+import { useDispatch } from "react-redux";
 
 function ProductItem(props) {
   const { id, image, title, description, price, category, onDeleteItem } =
     props;
   const productItem = { id, image, title, description, price, category };
-  const { addToCart } = useContext(CartContext);
+  const dispatch = useDispatch();
 
   return (
     <div className="product-item">
@@ -23,7 +25,7 @@ function ProductItem(props) {
         <Button
           color="primary"
           size="sm"
-          onClick={() => addToCart(productItem)}
+          onClick={() => dispatch(addToCart(productItem))}
         >
           Sepete Ekle
         </Button>
