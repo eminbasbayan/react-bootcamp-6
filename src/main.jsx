@@ -10,12 +10,10 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <BrowserRouter>
-      <ThemeProvider>
-        <CartProvider>
-          <App />
-        </CartProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </ThemeProvider>
   </Provider>
 );

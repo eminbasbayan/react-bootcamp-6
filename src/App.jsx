@@ -1,5 +1,10 @@
 import { useContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Route,
+  RouterProvider,
+  Routes,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ThemeContext } from "./context/ThemeProvider";
 import Header from "./components/Layout/Header";
@@ -11,9 +16,51 @@ import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
+import MainLayout from "./layouts/MainLayout";
 
 function App() {
   const { darkMode } = useContext(ThemeContext);
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <MainLayout />,
+      children: [
+        {
+          path: "/",
+          element: <HomePage />,
+        },
+        {
+          path: "/products",
+          element: <ProductsPage />,
+        },
+        {
+          path: "/products/:id",
+          element: <ProductDetailsPage />,
+        },
+        {
+          path: "/cart",
+          element: <CartPage />,
+        },
+        {
+          path: "/about",
+          element: <AboutPage />,
+        },
+        {
+          path: "/contact",
+          element: <ContactPage />,
+        },
+        {
+          path: "/login",
+          element: <LoginPage />,
+        },
+        {
+          path: "/register",
+          element: <RegisterPage />,
+        },
+      ],
+    },
+  ]);
 
   return (
     <div
@@ -24,18 +71,8 @@ function App() {
       }}
     >
       <ToastContainer />
-      <Header />
       <div className="pt-4">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/products/:id" element={<ProductDetailsPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-        </Routes>
+        <RouterProvider router={router} />
       </div>
     </div>
   );
