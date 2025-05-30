@@ -2,12 +2,13 @@ import { Moon, ShoppingCart, Sun } from "lucide-react";
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 import { ThemeContext } from "../../context/ThemeProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { darkMode, toggleTheme } = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   return (
     <header className="bg-white shadow-md sticky top-0">
@@ -47,16 +48,18 @@ const Header = () => {
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           {/* Sepet Butonu */}
-          <Link to="/cart" className="relative">
-            <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">
-              <ShoppingCart size={20} />
-              <span>Sepet</span>
-            </button>
-            {/* Sepet öğe sayısı için küçük rozet */}
-            <span className="absolute top-0 right-0 -mt-1 -mr-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {cartItems.length}
-            </span>
-          </Link>
+          <button
+            className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition relative"
+            onClick={() => navigate("/cart")}
+          >
+            <ShoppingCart size={20} />
+                     {/* Sepet öğe sayısı için küçük rozet */}
+          <span className="absolute top-0 right-0 -mt-2 -mr-4 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            {cartItems.length}
+          </span>
+            <span>Sepet</span>
+          </button>
+ 
         </div>
       </div>
     </header>
