@@ -17,6 +17,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
 function App() {
   const { darkMode } = useContext(ThemeContext);
@@ -50,12 +51,18 @@ function App() {
           path: "/contact",
           element: <ContactPage />,
         },
+      ],
+    },
+    {
+      path: "/auth",
+      element: <AuthLayout />,
+      children: [
         {
-          path: "/login",
+          path: "login",
           element: <LoginPage />,
         },
         {
-          path: "/register",
+          path: "register",
           element: <RegisterPage />,
         },
       ],
