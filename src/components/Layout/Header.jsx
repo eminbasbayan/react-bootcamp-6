@@ -2,7 +2,7 @@ import { Moon, ShoppingCart, Sun } from "lucide-react";
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 import { ThemeContext } from "../../context/ThemeProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Header = () => {
@@ -18,27 +18,33 @@ const Header = () => {
 
         {/* Menü */}
         <nav className="hidden md:flex space-x-6">
-          <Link to="/" className="text-gray-700 hover:text-blue-600 transition">
+          <NavLink to="/" className={({isActive})=> isActive ? "text-blue-600 font-semibold" : "text-gray-700 hover:text-blue-600 transition"}>
             Anasayfa
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/products"
-            className="text-gray-700 hover:text-blue-600 transition"
+            className={({ isActive }) =>
+              isActive ? "text-blue-600 font-semibold" : "text-gray-700 hover:text-blue-600 transition"
+            }
           >
             Ürünler
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/about"
-            className="text-gray-700 hover:text-blue-600 transition"
+            className={({ isActive }) =>
+              isActive ? "text-blue-600 font-semibold" : "text-gray-700 hover:text-blue-600 transition"
+            }
           >
             Hakkımızda
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/contact"
-            className="text-gray-700 hover:text-blue-600 transition"
+            className={({ isActive }) =>
+              isActive ? "text-blue-600 font-semibold" : "text-gray-700 hover:text-blue-600 transition"
+            }
           >
             İletişim
-          </Link>
+          </NavLink>
         </nav>
         <div className="flex gap-2">
           <button
