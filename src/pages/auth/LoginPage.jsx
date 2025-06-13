@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import LoginForm from "../components/Auth/LoginForm";
+import LoginForm from "../../components/Auth/LoginForm";
 import { ShoppingBag } from "lucide-react";
 
 const LoginPage = () => {

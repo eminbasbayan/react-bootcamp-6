@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import RegisterForm from '../components/Auth/RegisterForm';
+import RegisterForm from '../../components/Auth/RegisterForm';
 import { ShoppingBag, ShieldCheck } from 'lucide-react';
 
 const RegisterPage = () => {
