@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { subscribeToAuthChanges } from '../services/authService';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../config/firebase';
+import { USER_ROLES, isAdmin, hasPermission } from '../constants/roles';
 
 const AuthContext = createContext();
 
@@ -20,20 +21,46 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Firebase user objesinden doğru bilgileri al
-        const userData = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          emailVerified: firebaseUser.emailVerified, // Firebase'den gelen gerçek emailVerified durumu
-          photoURL: firebaseUser.photoURL,
-          phoneNumber: firebaseUser.phoneNumber,
-          createdAt: firebaseUser.metadata.creationTime,
-          lastLoginAt: firebaseUser.metadata.lastSignInTime,
-          providerData: firebaseUser.providerData
-        };
-        
-        setUser(userData);
+        try {
+          // Firestore'dan kullanıcı verilerini al (role için)
+          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          const userData = userDoc.exists() ? userDoc.data() : null;
+          
+          const userInfo = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            emailVerified: firebaseUser.emailVerified,
+            photoURL: firebaseUser.photoURL,
+            phoneNumber: firebaseUser.phoneNumber,
+            createdAt: firebaseUser.metadata.creationTime,
+            lastLoginAt: firebaseUser.metadata.lastSignInTime,
+            providerData: firebaseUser.providerData,
+            // Firestore'dan gelen veriler
+            role: userData?.role || USER_ROLES.USER,
+            isActive: userData?.isActive !== false,
+            permissions: userData?.permissions || []
+          };
+          
+          setUser(userInfo);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          // Firebase Auth verilerini kullan, role'ü default yap
+          setUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            emailVerified: firebaseUser.emailVerified,
+            photoURL: firebaseUser.photoURL,
+            phoneNumber: firebaseUser.phoneNumber,
+            createdAt: firebaseUser.metadata.creationTime,
+            lastLoginAt: firebaseUser.metadata.lastSignInTime,
+            providerData: firebaseUser.providerData,
+            role: USER_ROLES.USER,
+            isActive: true,
+            permissions: []
+          });
+        }
       } else {
         setUser(null);
       }
@@ -47,10 +74,14 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     isAuthenticated: !!user,
-    isEmailVerified: user?.emailVerified || false, // Firebase'den gelen emailVerified değeri
+    isEmailVerified: user?.emailVerified || false,
     userEmail: user?.email,
     userName: user?.displayName,
-    userId: user?.uid
+    userId: user?.uid,
+    userRole: user?.role,
+    isAdmin: user ? isAdmin(user.role) : false,
+    isActive: user?.isActive || false,
+    hasPermission: (permission) => user ? hasPermission(user.role, permission) : false
   };
 
   return (

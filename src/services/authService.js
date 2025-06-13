@@ -8,8 +8,9 @@ import {
   sendPasswordResetEmail,
   reload
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
+import { USER_ROLES } from '../constants/roles';
 
 // Kullanıcı kayıt işlemi
 export const registerUser = async (userData) => {
@@ -28,16 +29,20 @@ export const registerUser = async (userData) => {
     // Email doğrulama gönder
     await sendEmailVerification(user);
     
-    // Firestore'da kullanıcı belgesi oluştur
-    await setDoc(doc(db, 'users', user.uid), {
+    // Firestore'da kullanıcı belgesi oluştur - DEFAULT ROLE EKLEME
+    const userDocData = {
       uid: user.uid,
       fullName,
       email,
       phone,
+      role: USER_ROLES.USER, // Default role
       createdAt: new Date().toISOString(),
       emailVerified: user.emailVerified,
-      role: 'user'
-    });
+      isActive: true,
+      permissions: ['read:products', 'read:profile', 'write:profile', 'read:orders']
+    };
+    
+    await setDoc(doc(db, 'users', user.uid), userDocData);
     
     return {
       success: true,
@@ -45,7 +50,8 @@ export const registerUser = async (userData) => {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
-        emailVerified: user.emailVerified
+        emailVerified: user.emailVerified,
+        role: USER_ROLES.USER
       },
       message: 'Kayıt başarılı! Lütfen e-postanızı doğrulayın.'
     };
@@ -79,18 +85,34 @@ export const registerUser = async (userData) => {
   }
 };
 
-// Kullanıcı giriş işlemi
+// Kullanıcı giriş işlemi - Role bilgisini de al
 export const loginUser = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     
-    // Kullanıcı bilgilerini yenile (emailVerified durumunu güncellemek için)
+    // Kullanıcı bilgilerini yenile
     await reload(user);
     
-    // Kullanıcı verilerini Firestore'dan al
+    // Kullanıcı verilerini Firestore'dan al (role bilgisi için)
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     const userData = userDoc.exists() ? userDoc.data() : null;
+    
+    if (!userData) {
+      // Eğer Firestore'da veri yoksa default oluştur
+      const defaultUserData = {
+        uid: user.uid,
+        fullName: user.displayName || '',
+        email: user.email,
+        role: USER_ROLES.USER,
+        createdAt: new Date().toISOString(),
+        emailVerified: user.emailVerified,
+        isActive: true
+      };
+      
+      await setDoc(doc(db, 'users', user.uid), defaultUserData);
+      userData = defaultUserData;
+    }
     
     return {
       success: true,
@@ -103,7 +125,9 @@ export const loginUser = async (email, password) => {
         phoneNumber: user.phoneNumber,
         lastLoginAt: user.metadata.lastSignInTime,
         createdAt: user.metadata.creationTime,
-        ...userData
+        role: userData.role || USER_ROLES.USER, // Role bilgisi
+        isActive: userData.isActive !== false,
+        permissions: userData.permissions || []
       }
     };
     
@@ -142,12 +166,33 @@ export const loginUser = async (email, password) => {
   }
 };
 
+// Kullanıcı role'ünü güncelle (sadece admin işlemi)
+export const updateUserRole = async (userId, newRole) => {
+  try {
+    await updateDoc(doc(db, 'users', userId), {
+      role: newRole,
+      updatedAt: new Date().toISOString()
+    });
+    
+    return {
+      success: true,
+      message: 'Kullanıcı rolü başarıyla güncellendi.'
+    };
+  } catch (error) {
+    console.error('Update role error:', error);
+    return {
+      success: false,
+      error: 'Rol güncellenirken hata oluştu.'
+    };
+  }
+};
+
 // Email doğrulama durumunu kontrol et
 export const checkEmailVerification = async () => {
   try {
     const user = auth.currentUser;
     if (user) {
-      await reload(user); // Kullanıcı bilgilerini yenile
+      await reload(user);
       return {
         success: true,
         emailVerified: user.emailVerified

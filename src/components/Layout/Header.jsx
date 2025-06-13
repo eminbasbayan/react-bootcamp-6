@@ -1,4 +1,4 @@
-import { Moon, ShoppingCart, Sun, User, LogOut, UserPlus, LogIn, Mail, MailCheck } from "lucide-react";
+import { Moon, ShoppingCart, Sun, User, LogOut, UserPlus, LogIn, Mail, MailCheck, Settings } from "lucide-react";
 import { useContext, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { ThemeContext } from "../../context/ThemeProvider";
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { darkMode, toggleTheme } = useContext(ThemeContext);
-  const { user, isAuthenticated, isEmailVerified } = useAuth();
+  const { user, isAuthenticated, isEmailVerified, isAdmin, userRole } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
 
@@ -81,7 +81,6 @@ const Header = () => {
           autoClose: 3000,
           theme: "colored"
         });
-        // AuthContext otomatik olarak güncellenecek
       } else {
         toast.info('E-posta henüz doğrulanmamış.', {
           position: "bottom-right",
@@ -138,6 +137,18 @@ const Header = () => {
           >
             İletişim
           </NavLink>
+          
+          {/* Admin Link - Sadece adminler için */}
+          {isAdmin && (
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                isActive ? "text-red-600 font-semibold" : "text-red-600 hover:text-red-700 transition"
+              }
+            >
+              Admin Panel
+            </NavLink>
+          )}
         </nav>
 
         {/* Sağ Taraf - Butonlar */}
@@ -179,6 +190,12 @@ const Header = () => {
                   <span className="text-white text-sm font-semibold">
                     {user?.displayName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                   </span>
+                  {/* Role Badge */}
+                  {isAdmin && (
+                    <div className="absolute -top-1 -left-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                      <Settings size={8} className="text-white" />
+                    </div>
+                  )}
                   {/* Email doğrulama durumu göstergesi */}
                   {isEmailVerified ? (
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
@@ -190,9 +207,16 @@ const Header = () => {
                     </div>
                   )}
                 </div>
-                <span className="hidden md:block text-sm font-medium text-gray-700">
-                  {user?.displayName || 'Kullanıcı'}
-                </span>
+                <div className="hidden md:block text-left">
+                  <span className="text-sm font-medium text-gray-700 block">
+                    {user?.displayName || 'Kullanıcı'}
+                  </span>
+                  {isAdmin && (
+                    <span className="text-xs text-red-600 capitalize">
+                      {userRole === 'super_admin' ? 'Süper Admin' : 'Admin'}
+                    </span>
+                  )}
+                </div>
               </button>
 
               {/* Dropdown Menü */}
@@ -204,20 +228,40 @@ const Header = () => {
                   />
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
                     <div className="p-4 border-b border-gray-200">
-                      <p className="text-sm font-medium text-gray-900">
-                        {user?.displayName || 'Kullanıcı'}
-                      </p>
-                      <p className="text-sm text-gray-500 truncate">
-                        {user?.email}
-                      </p>
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center relative">
+                          <span className="text-white font-semibold">
+                            {user?.displayName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                          </span>
+                          {isAdmin && (
+                            <div className="absolute -top-1 -left-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                              <Settings size={10} className="text-white" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900">
+                            {user?.displayName || 'Kullanıcı'}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {user?.email}
+                          </p>
+                          {isAdmin && (
+                            <span className="inline-block mt-1 px-2 py-1 text-xs bg-red-100 text-red-600 rounded-full capitalize">
+                              {userRole === 'super_admin' ? 'Süper Admin' : 'Admin'}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
                       {/* Email doğrulama durumu */}
                       {isEmailVerified ? (
-                        <div className="flex items-center mt-2 text-xs text-green-600">
+                        <div className="flex items-center mt-3 text-xs text-green-600">
                           <MailCheck size={12} className="mr-1" />
                           E-posta doğrulandı
                         </div>
                       ) : (
-                        <div className="mt-2">
+                        <div className="mt-3">
                           <div className="flex items-center text-xs text-orange-600 mb-2">
                             <Mail size={12} className="mr-1" />
                             E-posta doğrulanmadı
@@ -239,6 +283,7 @@ const Header = () => {
                         </div>
                       )}
                     </div>
+                    
                     <div className="py-1">
                       <button
                         onClick={() => {
@@ -260,6 +305,24 @@ const Header = () => {
                         <ShoppingCart size={16} className="mr-3" />
                         Siparişlerim
                       </button>
+                      
+                      {/* Admin Panel Linki */}
+                      {isAdmin && (
+                        <>
+                          <hr className="my-1" />
+                          <button
+                            onClick={() => {
+                              setShowUserMenu(false);
+                              navigate('/admin');
+                            }}
+                            className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                          >
+                            <Settings size={16} className="mr-3" />
+                            Admin Panel
+                          </button>
+                        </>
+                      )}
+                      
                       <hr className="my-1" />
                       <button
                         onClick={handleLogout}
