@@ -4,7 +4,9 @@ import {
   signOut,
   updateProfile,
   sendEmailVerification,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  reload
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
@@ -33,7 +35,7 @@ export const registerUser = async (userData) => {
       email,
       phone,
       createdAt: new Date().toISOString(),
-      emailVerified: false,
+      emailVerified: user.emailVerified,
       role: 'user'
     });
     
@@ -51,7 +53,6 @@ export const registerUser = async (userData) => {
   } catch (error) {
     console.error('Register error:', error);
     
-    // Firebase hata mesajlarını Türkçe'ye çevir
     let errorMessage = 'Kayıt sırasında bir hata oluştu.';
     
     switch (error.code) {
@@ -84,6 +85,9 @@ export const loginUser = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     
+    // Kullanıcı bilgilerini yenile (emailVerified durumunu güncellemek için)
+    await reload(user);
+    
     // Kullanıcı verilerini Firestore'dan al
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     const userData = userDoc.exists() ? userDoc.data() : null;
@@ -95,6 +99,10 @@ export const loginUser = async (email, password) => {
         email: user.email,
         displayName: user.displayName,
         emailVerified: user.emailVerified,
+        photoURL: user.photoURL,
+        phoneNumber: user.phoneNumber,
+        lastLoginAt: user.metadata.lastSignInTime,
+        createdAt: user.metadata.creationTime,
         ...userData
       }
     };
@@ -120,6 +128,9 @@ export const loginUser = async (email, password) => {
       case 'auth/too-many-requests':
         errorMessage = 'Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin.';
         break;
+      case 'auth/invalid-credential':
+        errorMessage = 'E-posta veya şifre hatalı.';
+        break;
       default:
         errorMessage = error.message;
     }
@@ -127,6 +138,54 @@ export const loginUser = async (email, password) => {
     return {
       success: false,
       error: errorMessage
+    };
+  }
+};
+
+// Email doğrulama durumunu kontrol et
+export const checkEmailVerification = async () => {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      await reload(user); // Kullanıcı bilgilerini yenile
+      return {
+        success: true,
+        emailVerified: user.emailVerified
+      };
+    }
+    return {
+      success: false,
+      error: 'Kullanıcı bulunamadı'
+    };
+  } catch (error) {
+    console.error('Email verification check error:', error);
+    return {
+      success: false,
+      error: 'Email doğrulama durumu kontrol edilemedi'
+    };
+  }
+};
+
+// Email doğrulama yeniden gönder
+export const resendEmailVerification = async () => {
+  try {
+    const user = auth.currentUser;
+    if (user && !user.emailVerified) {
+      await sendEmailVerification(user);
+      return {
+        success: true,
+        message: 'Doğrulama e-postası tekrar gönderildi.'
+      };
+    }
+    return {
+      success: false,
+      error: 'Email zaten doğrulanmış veya kullanıcı bulunamadı'
+    };
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    return {
+      success: false,
+      error: 'Email doğrulama gönderilemedi'
     };
   }
 };
@@ -141,6 +200,37 @@ export const logoutUser = async () => {
     return {
       success: false,
       error: 'Çıkış yaparken bir hata oluştu.'
+    };
+  }
+};
+
+// Şifre sıfırlama
+export const resetPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return {
+      success: true,
+      message: 'Şifre sıfırlama linki e-posta adresinize gönderildi.'
+    };
+  } catch (error) {
+    console.error('Password reset error:', error);
+    
+    let errorMessage = 'Şifre sıfırlama sırasında bir hata oluştu.';
+    
+    switch (error.code) {
+      case 'auth/user-not-found':
+        errorMessage = 'Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı.';
+        break;
+      case 'auth/invalid-email':
+        errorMessage = 'Geçersiz e-posta adresi.';
+        break;
+      default:
+        errorMessage = error.message;
+    }
+    
+    return {
+      success: false,
+      error: errorMessage
     };
   }
 };

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { subscribeToAuthChanges } from '../services/authService';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../config/firebase';
 
 const AuthContext = createContext();
 
@@ -16,8 +18,25 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = subscribeToAuthChanges((firebaseUser) => {
-      setUser(firebaseUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // Firebase user objesinden doğru bilgileri al
+        const userData = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          emailVerified: firebaseUser.emailVerified, // Firebase'den gelen gerçek emailVerified durumu
+          photoURL: firebaseUser.photoURL,
+          phoneNumber: firebaseUser.phoneNumber,
+          createdAt: firebaseUser.metadata.creationTime,
+          lastLoginAt: firebaseUser.metadata.lastSignInTime,
+          providerData: firebaseUser.providerData
+        };
+        
+        setUser(userData);
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
@@ -28,10 +47,11 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     isAuthenticated: !!user,
-    isEmailVerified: user?.emailVerified || false
+    isEmailVerified: user?.emailVerified || false, // Firebase'den gelen emailVerified değeri
+    userEmail: user?.email,
+    userName: user?.displayName,
+    userId: user?.uid
   };
-
-  console.log(user);
 
   return (
     <AuthContext.Provider value={value}>
