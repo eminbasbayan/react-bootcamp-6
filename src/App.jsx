@@ -18,6 +18,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   const { darkMode } = useContext(ThemeContext);
@@ -67,6 +68,17 @@ function App() {
         },
       ],
     },
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      index: true,
+     /*  children: [
+        {
+          path: "dashboard",
+          element: <DashboardPage />,
+        }
+      ] */
+    }
   ]);
 
   return (
