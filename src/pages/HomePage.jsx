@@ -1,10 +1,12 @@
 import React from 'react';
 import Products from '../components/Products/Products';
 import { ShoppingBag, Truck, CreditCard, Headphones } from 'lucide-react';
+import Counter from '../components/Counter';
 
 const HomePage = () => {
   return (
     <div className="home-page container mx-auto py-6 px-4">
+      <Counter />
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-2xl p-8 mb-10 shadow-lg">
         <div className="max-w-2xl">
