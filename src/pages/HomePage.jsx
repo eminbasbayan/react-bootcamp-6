@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Products from '../components/Products/Products';
 import { ShoppingBag, Truck, CreditCard, Headphones } from 'lucide-react';
 import Counter from '../components/Counter';
@@ -8,9 +8,11 @@ import MyButton from '../components/PerformanceOptimization/MyButton';
 const HomePage = () => {
   const [toggleParagraph, setToggleParagraph] = useState(false);
 
-  const handleToggleParagraph = () => {
+  console.log("HomePage re-render edildi");
+
+  const handleToggleParagraph = useCallback(() => {
     setToggleParagraph(!toggleParagraph);
-  };
+  }, []);
 
   return (
     <div className="home-page container mx-auto py-6 px-4">
