@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Products from '../components/Products/Products';
 import { ShoppingBag, Truck, CreditCard, Headphones } from 'lucide-react';
 import Counter from '../components/Counter';
+import MyElement from '../components/PerformanceOptimization/MyElement';
+import MyButton from '../components/PerformanceOptimization/MyButton';
 
 const HomePage = () => {
+  const [toggleParagraph, setToggleParagraph] = useState(false);
+
+  const handleToggleParagraph = () => {
+    setToggleParagraph(!toggleParagraph);
+  };
+
   return (
     <div className="home-page container mx-auto py-6 px-4">
-      <Counter />
+      <MyElement show={false} />
+      <MyButton onClick={handleToggleParagraph}>Toggle Paragraph</MyButton>
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-2xl p-8 mb-10 shadow-lg">
         <div className="max-w-2xl">
