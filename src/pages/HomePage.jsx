@@ -1,27 +1,24 @@
-import React, { use, useCallback, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import Products from "../components/Products/Products";
 import { ShoppingBag, Truck, CreditCard, Headphones } from "lucide-react";
-import Counter from "../components/Counter";
-import MyElement from "../components/PerformanceOptimization/MyElement";
-import MyButton from "../components/PerformanceOptimization/MyButton";
-import MyList from "../components/PerformanceOptimization/MyList";
+
+import { fetchProducts } from "../redux/productSlice";
 
 const HomePage = () => {
-  const [title, setTitle] = useState("Title State");
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.product);
 
-  console.log("HomePage re-render edildi");
+  console.log("products:", products);
+  console.log("loading:", loading);
+  console.log("error:", error);
 
-  const handleTitleChange = useCallback(() => {
-    setTitle("Title Changed");
+  useEffect(() => {
+    dispatch(fetchProducts());
   }, []);
-
-  const listItems = useMemo(() => [1, 3, 2, 4, 5], []);
 
   return (
     <div className="home-page container mx-auto py-6 px-4">
-      <h1>{title}</h1>
-      <MyList items={listItems} />
-      <MyButton onClick={handleTitleChange}>Title Change</MyButton>
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-2xl p-8 mb-10 shadow-lg">
         <div className="max-w-2xl">
