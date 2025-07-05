@@ -6,7 +6,6 @@ const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const fullName = "Emin Başbayan";
 
-  console.log(cartItems);
 
   // 1, 2, 3, 4, 5
   function addToCart(productItem) {
